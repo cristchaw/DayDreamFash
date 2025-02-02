@@ -497,6 +497,8 @@ class NotificationView(ListView):
         context['unpaid'] = transactions.filter(transaction_status__in=['pending', 'unpaid'])
         context['on_process'] = transactions.filter(order_status='On Process')
         context['completed'] = transactions.filter(order_status='Completed')
+        context['midtrans_client_key'] = settings.MIDTRANS_CLIENT_KEY
+        context['midtrans_is_production'] = settings.MIDTRANS_IS_PRODUCTION
         
         return context
         
