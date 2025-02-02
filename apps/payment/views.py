@@ -482,36 +482,21 @@ class NotificationView(ListView):
     context_object_name = 'transactions'
     
     def get_queryset(self):
-        # Pastikan session sudah dibuat
         if not self.request.session.session_key:
             self.request.session.create()
             
         return Transaction.objects.filter(
             session_id=self.request.session.session_key
-        ).order_by('-transaction_time')
+        ).prefetch_related('orderitem_set').order_by('-transaction_time')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        transactions = self.get_queryset()
         
-        # Filter berdasarkan session_id
-        context['unpaid'] = Transaction.objects.filter(
-            session_id=self.request.session.session_key,
-            transaction_status='pending'
-        ).order_by('-transaction_time')
-        
-        context['on_process'] = Transaction.objects.filter(
-            session_id=self.request.session.session_key,
-            order_status='On Process'
-        ).order_by('-transaction_time')
-        
-        context['completed'] = Transaction.objects.filter(
-            session_id=self.request.session.session_key,
-            order_status='Completed'
-        ).order_by('-transaction_time')
-        
-        # Tambahkan client key Midtrans untuk pembayaran
-        context['midtrans_client_key'] = settings.MIDTRANS_CLIENT_KEY
-        context['midtrans_is_production'] = settings.MIDTRANS_IS_PRODUCTION
+        # Group transactions by status
+        context['unpaid'] = transactions.filter(transaction_status__in=['pending', 'unpaid'])
+        context['on_process'] = transactions.filter(order_status='On Process')
+        context['completed'] = transactions.filter(order_status='Completed')
         
         return context
         

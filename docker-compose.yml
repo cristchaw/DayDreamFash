@@ -1,0 +1,27 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: liarwy/ngopiin:latest
+    command: python manage.py runserver 0.0.0.0:${PORT}
+    volumes:
+      - .:/app
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+      - sqlite_volume:/app
+    ports:
+      - "${PORT}:${PORT}"
+    env_file:
+      - .env
+    networks:
+      - ngopiin_network
+
+volumes:
+  static_volume:
+  media_volume:
+  sqlite_volume:
+
+networks:
+  ngopiin_network:
+    driver: bridge

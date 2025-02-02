@@ -3,67 +3,81 @@
 {% block title %}Menu Kopi - Ngopiin{% endblock %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-12 my-[80px] min-h-[75vh]">
-    <!-- Hero Section -->
-    <h1 class="text-3xl font-bold text-gray-900 mb-8">Menu Kopi</h1>
+<div class="relative">
+    <div class="container relative mx-auto px-4 py-12 my-[80px] min-h-[75vh]">
+        <!-- Hero Section -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Menu Kopi</h1>
+            <p class="text-gray-600 max-w-2xl mx-auto">Temukan berbagai pilihan kopi berkualitas untuk menemani harimu</p>
+        </div>
+        <!-- Categories -->
+        <div class="flex overflow-x-auto space-x-3 sm:space-x-4 mb-8 pb-4 scrollbar-hide">
+            <a href="{% url 'apps:product_list' %}" 
+               class="flex-shrink-0 px-6 py-3 text-sm font-medium rounded-xl {% if not request.GET.category %}bg-yellow-800 text-white shadow-lg shadow-yellow-800/30{% else %}bg-white text-gray-700 border border-gray-200{% endif %} hover:bg-yellow-700 hover:text-white transition-all duration-300">
+                Semua
+            </a>
+            {% for category in categories %}
+            <a href="{% url 'apps:product_list' %}?category={{ category.slug }}" 
+               class="flex-shrink-0 px-6 py-3 text-sm font-medium rounded-xl {% if request.GET.category == category.slug %}bg-yellow-800 text-white shadow-lg shadow-yellow-800/30{% else %}bg-white text-gray-700 border border-gray-200{% endif %} hover:bg-yellow-700 hover:text-white transition-all duration-300">
+                {{ category.name }}
+            </a>
+            {% endfor %}
+        </div>
 
-    <!-- Categories -->
-    <div class="flex overflow-x-auto space-x-3 sm:space-x-4 mb-6 sm:mb-8 pb-4 scrollbar-hide">
-        <a href="{% url 'apps:product_list' %}" 
-           class="flex-shrink-0 px-3 sm:px-4 py-2 text-sm sm:text-base rounded-full {% if not request.GET.category %}bg-yellow-800 text-white{% else %}bg-gray-200 text-gray-700{% endif %} hover:bg-yellow-700 hover:text-white transition">
-            Semua
-        </a>
-        {% for category in categories %}
-        <a href="{% url 'apps:product_list' %}?category={{ category.slug }}" 
-           class="flex-shrink-0 px-3 sm:px-4 py-2 text-sm sm:text-base rounded-full {% if request.GET.category == category.slug %}bg-yellow-800 text-white{% else %}bg-gray-200 text-gray-700{% endif %} hover:bg-yellow-700 hover:text-white transition">
-            {{ category.name }}
-        </a>
-        {% endfor %}
-    </div>
-
-    <!-- Products Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-        {% for product in products %}
-        <div class="group">
-            <div class="bg-white rounded-xl overflow-hidden transform hover:-translate-y-2 transition duration-300">
-                <div class="relative overflow-hidden">
-                    <img src="{{ product.image.url }}" 
-                         alt="{{ product.name }}" 
-                         class="w-full h-64 object-cover transform group-hover:scale-110 transition duration-500">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition duration-300"></div>
-                </div>
-                <div class="p-6">
-                    <div class="flex items-center justify-between mb-2">
-                        <h3 class="text-xl font-semibold text-gray-900">{{ product.name }}</h3>
-                        <span class="px-3 py-1 bg-yellow-100 text-yellow-800 text-sm rounded-full">{{ product.category.name }}</span>
+        <!-- Products Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10">
+            {% for product in products %}
+            <div class="group">
+                <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300">
+                    <!-- Modified image container with fixed aspect ratio -->
+                    <div class="relative w-full pb-[75%]">
+                        <img src="{{ product.image.url }}" 
+                             alt="{{ product.name }}" 
+                             class="absolute inset-0 w-full h-full object-cover transform group-hover:scale-110 transition duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition duration-300"></div>
                     </div>
-                    <p class="text-gray-600 mb-4 line-clamp-2">{{ product.description }}</p>
-                    <div class="flex justify-between items-center">
-                        <span class="text-yellow-800 font-bold text-lg">Rp {{ product.price|floatformat:0 }}</span>
-                        <form method="post" action="{% url 'apps:add_to_cart' product.id %}" class="inline">
-                            {% csrf_token %}
-                            <button type="submit" 
-                                    {% if not product.is_available %}disabled{% endif %}
-                                    class="bg-yellow-800 text-white px-6 py-2 rounded-full {% if not product.is_available %}opacity-50 cursor-not-allowed{% else %}hover:bg-yellow-700 transform hover:scale-105{% endif %} transition duration-300">
-                                {% if product.is_available %}
-                                    + Keranjang
-                                {% else %}
-                                    Tidak Tersedia
-                                {% endif %}
-                            </button>
-                        </form>
+                    <!-- Rest of the product card remains unchanged -->
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold text-gray-900 group-hover:text-yellow-800 transition-colors">{{ product.name }}</h3>
+                            <span class="px-4 py-1.5 bg-yellow-50 text-yellow-800 text-sm font-medium rounded-full">{{ product.category.name }}</span>
+                        </div>
+                        <p class="text-gray-600 mb-4 line-clamp-2">{{ product.description }}</p>
+                        <div class="flex justify-between items-center pt-4 border-t border-gray-100">
+                            <span class="text-yellow-800 font-bold text-xl">Rp {{ product.price|floatformat:0 }}</span>
+                            <form method="post" action="{% url 'apps:add_to_cart' product.id %}" class="inline">
+                                {% csrf_token %}
+                                <button type="submit" 
+                                        {% if not product.is_available %}disabled{% endif %}
+                                        class="bg-yellow-800 text-white px-6 py-2.5 rounded-xl font-medium {% if not product.is_available %}opacity-50 cursor-not-allowed{% else %}hover:bg-yellow-700 transform hover:scale-105 shadow-lg hover:shadow-yellow-800/30{% endif %} transition-all duration-300">
+                                    {% if product.is_available %}
+                                        + Keranjang
+                                    {% else %}
+                                        Tidak Tersedia
+                                    {% endif %}
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
+            {% empty %}
+            <div class="col-span-full text-center py-16">
+                <div class="max-w-md mx-auto">
+                    <svg class="w-24 h-24 mx-auto text-gray-300 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 20h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <p class="text-gray-500 text-lg mb-4">Tidak ada produk yang tersedia untuk kategori ini.</p>
+                    <a href="{% url 'apps:product_list' %}" class="inline-flex items-center px-6 py-3 text-yellow-800 hover:text-white bg-yellow-50 hover:bg-yellow-800 rounded-xl transition-all duration-300">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                        </svg>
+                        Kembali ke semua menu
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
         </div>
-        {% empty %}
-        <div class="col-span-full text-center py-8">
-            <p class="text-gray-500">Tidak ada produk yang tersedia untuk kategori ini.</p>
-            <a href="{% url 'apps:product_list' %}" class="mt-4 inline-block text-yellow-800 hover:text-yellow-700">
-                Kembali ke semua menu
-            </a>
-        </div>
-        {% endfor %}
     </div>
 </div>
 
@@ -75,6 +89,14 @@
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
+    
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
 </style>
 {% endblock %}
-{% endblock %} 
+{% endblock %}

@@ -145,16 +145,18 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 
 
-MIDTRANS = {
-    'SERVER_KEY': env('MIDTRANS_SERVER_KEY', default=''),
-    'CLIENT_KEY': env('MIDTRANS_CLIENT_KEY', default=''),
-    'IS_PRODUCTION': env.bool('MIDTRANS_IS_PRODUCTION', default=False),
-}
+
 
 # Midtrans Configuration
-MIDTRANS_SERVER_KEY = env('MIDTRANS_SERVER_KEY', default='')
-MIDTRANS_CLIENT_KEY = env('MIDTRANS_CLIENT_KEY', default='')
-MIDTRANS_IS_PRODUCTION = env.bool('MIDTRANS_IS_PRODUCTION', default=False)
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# Midtrans Settings
+MIDTRANS_SERVER_KEY = os.getenv('MIDTRANS_SERVER_KEY')
+MIDTRANS_CLIENT_KEY = os.getenv('MIDTRANS_CLIENT_KEY')
+MIDTRANS_IS_PRODUCTION = env.bool('MIDTRANS_IS_PRODUCTION')
 
 # Messages
 from django.contrib.messages import constants as messages
