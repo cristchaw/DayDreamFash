@@ -1,24 +1,24 @@
 {% extends 'base.html' %}
 
-{% block title %}Menu Kopi - Ngopiin{% endblock %}
+{% block title %}Menu Kopi - DayDream{% endblock %}
 
 {% block content %}
 <div class="relative">
     <div class="container relative mx-auto px-4 py-12 my-[80px] min-h-[75vh]">
         <!-- Hero Section -->
         <div class="text-center mb-12">
-            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Menu Kopi</h1>
-            <p class="text-gray-600 max-w-2xl mx-auto">Temukan berbagai pilihan kopi berkualitas untuk menemani harimu</p>
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Design Baju</h1>
+            <p class="text-gray-600 max-w-2xl mx-auto">Temukan berbagai pilihan bahan berkualitas untuk menemani harimu</p>
         </div>
         <!-- Categories -->
         <div class="flex overflow-x-auto space-x-3 sm:space-x-4 mb-8 pb-4 scrollbar-hide">
             <a href="{% url 'apps:product_list' %}" 
-               class="flex-shrink-0 px-6 py-3 text-sm font-medium rounded-xl {% if not request.GET.category %}bg-yellow-800 text-white shadow-lg shadow-yellow-800/30{% else %}bg-white text-gray-700 border border-gray-200{% endif %} hover:bg-yellow-700 hover:text-white transition-all duration-300">
+               class="flex-shrink-0 px-6 py-3 text-sm font-medium rounded-xl {% if not request.GET.category %}bg-[#384f79] text-white shadow-lg shadow-[#384f79]/30{% else %}bg-white text-gray-700 border border-gray-200{% endif %} hover:bg-[#6f7d96] hover:text-white transition-all duration-300">
                 Semua
             </a>
             {% for category in categories %}
             <a href="{% url 'apps:product_list' %}?category={{ category.slug }}" 
-               class="flex-shrink-0 px-6 py-3 text-sm font-medium rounded-xl {% if request.GET.category == category.slug %}bg-yellow-800 text-white shadow-lg shadow-yellow-800/30{% else %}bg-white text-gray-700 border border-gray-200{% endif %} hover:bg-yellow-700 hover:text-white transition-all duration-300">
+               class="flex-shrink-0 px-6 py-3 text-sm font-medium rounded-xl {% if request.GET.category == category.slug %}bg-[#384f79] text-white shadow-lg shadow-[#384f79]/30{% else %}bg-white text-gray-700 border border-gray-200{% endif %} hover:bg-[#6f7d96] hover:text-white transition-all duration-300">
                 {{ category.name }}
             </a>
             {% endfor %}
@@ -68,7 +68,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 20h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                     <p class="text-gray-500 text-lg mb-4">Tidak ada produk yang tersedia untuk kategori ini.</p>
-                    <a href="{% url 'apps:product_list' %}" class="inline-flex items-center px-6 py-3 text-yellow-800 hover:text-white bg-yellow-50 hover:bg-yellow-800 rounded-xl transition-all duration-300">
+                    <a href="{% url 'apps:product_list' %}" class="inline-flex items-center px-6 py-3 text-yellow-100 hover:text-white bg-[#6f7d96] hover:bg-[#6f7d96] rounded-xl transition-all duration-300">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                         </svg>
